@@ -51,7 +51,19 @@ CrowScout is designed for websites that present paginated or dynamically loaded 
    - Treat flags as review signals, not proof of fraud or falsity.
    - Preserve raw values and explain each flag; never silently "correct" source data.
 
-7. **Results and export**
+7. **User-guided page interaction**
+   - Operate ordinary, visible website controls such as Search, Apply, Next, Show more and profile links when needed to reveal or navigate to results.
+   - Let the user teach CrowScout which control to use when automatic discovery is uncertain.
+   - Never click controls that send messages, make payments, purchase items, delete content or otherwise perform unrelated/high-impact actions.
+   - Pause when CAPTCHA, bot challenges, access denial or rate limits appear; never bypass them.
+
+8. **Cross-profile integrity checks**
+   - Detect repeated or near-duplicate photographs across collected profiles using image hashes and visual similarity, not facial recognition.
+   - Detect repeated contact numbers within the collected site dataset, using local comparison and masked display where practical.
+   - Compare profile fields for inconsistent or reused information.
+   - Treat duplicate images or contact details as review signals, not proof of fraud, impersonation or image theft.
+
+9. **Results and export**
    - Searchable local results with source-profile links.
    - CSV and JSON export.
    - Scan history, template management and deletion controls.
@@ -63,6 +75,9 @@ CrowScout is designed for websites that present paginated or dynamically loaded 
 - No stealth, proxy rotation or evasion of rate limits.
 - No automatic collection of every available field: collect only fields selected by the user and necessary for the stated scan.
 - No claims that an anomaly score is a probability of fraud.
+- No facial recognition, identity matching or attempts to identify people in photographs.
+- No reverse-image searching intended to identify a person or uncover their personal accounts.
+- Image and contact matching is limited to the user's collected dataset unless a separately reviewed, lawful feature is explicitly added.
 - No default upload of profile content to a remote service.
 - Follow applicable law, site terms, robots/access guidance where relevant, and reasonable rate limits.
 
@@ -70,7 +85,7 @@ CrowScout is designed for websites that present paginated or dynamically loaded 
 
 1. Paste a starting URL.
 2. Grant access to that specific website when Chrome requests it.
-3. Inspect the current page and identify language controls, search controls, result cards and pagination.
+3. Inspect the current page and identify language controls, search controls, result cards, required visible buttons and pagination.
 4. Optionally select a preferred website language and verify the change.
 5. If necessary, click one example profile so CrowScout can learn the detail-page structure.
 6. Review discovered fields and confirm the site template.
@@ -96,7 +111,9 @@ CrowScout is designed for websites that present paginated or dynamically loaded 
 
 - **Side Panel UI:** URL input, permission status, scan configuration, field mapping, filters, results and exports.
 - **Service Worker / Orchestrator:** scan lifecycle, navigation coordination, rate limiting, persistence and recovery.
-- **Page Inspector:** forms, cards, links, pagination and profile-field discovery.
+- **Page Inspector:** forms, cards, links, visible controls, pagination and profile-field discovery.
+- **Interaction Controller:** user-confirmed clicks on ordinary search/navigation/reveal controls, with safe action allowlists.
+- **Image Similarity Analyzer:** local exact/near-duplicate image comparison across collected profiles, without face recognition.
 - **Native Language Adapter:** identifies and uses site-provided language controls.
 - **Content Language Layer:** segment-level language detection, provenance and optional translation.
 - **Extraction Engine:** site-template-based extraction with user-confirmed mappings.
@@ -109,6 +126,8 @@ CrowScout is designed for websites that present paginated or dynamically loaded 
 - [ ] Accept a user-supplied starting URL.
 - [ ] Request narrow, explicit access to that site's origin.
 - [ ] Identify a listing page containing profile cards or links.
+- [ ] Use a user-confirmed visible Search/Next/Show-more control when the site requires a button press.
+- [ ] Pause safely when a CAPTCHA, bot challenge, access denial or rate limit appears.
 - [ ] Detect and traverse ordinary pagination within a user-defined limit.
 - [ ] Learn a profile page from a user-selected example.
 - [ ] Extract at least ten configurable attributes from a representative test site.
@@ -117,6 +136,8 @@ CrowScout is designed for websites that present paginated or dynamically loaded 
 - [ ] Detect and use a site's own language selector when available, with a verification step.
 - [ ] Keep original, site-translated and optional machine-translated text distinct.
 - [ ] Flag suspicious numeric values with explanations without changing them.
+- [ ] Detect repeated contact details within the collected dataset, with clear caveats.
+- [ ] Detect exact/near-duplicate listing images across collected profiles without facial recognition.
 - [ ] Deduplicate profiles and export results to CSV and JSON.
 - [ ] Stop cleanly and resume safely without duplicating records.
 
@@ -157,6 +178,9 @@ CrowScout/
 - Residual profile text: optional segment-level translation, preserving originals
 - Search: local filtering across any discovered field
 - Extraction: generic engine plus reusable, user-confirmed site templates
+- Interaction: visible, user-confirmed search/navigation/reveal controls only
+- Image integrity: local image reuse detection; no facial recognition or person identification
+- Bot challenges: stop and defer to the user; no circumvention
 
 ## Open questions for implementation
 
